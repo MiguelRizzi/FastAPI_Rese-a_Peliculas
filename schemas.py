@@ -1,7 +1,18 @@
 from pydantic import BaseModel
 from pydantic import validator
+from pydantic.v1.utils import GetterDict
+from typing import Any
+from peewee import ModelSelect
 
-class UserBaseModel(BaseModel):
+class PeeweeGetterDict(GetterDict):
+    def get(self, key: Any, default: Any = None):
+        res = getattr(self._obj, key, default)
+        if isinstance(res, ModelSelect):
+            return list(res)
+        return res
+
+
+class UserRequestModel(BaseModel):
     username: str
     password: str
 
@@ -11,3 +22,12 @@ class UserBaseModel(BaseModel):
             raise ValueError("username must be between 3 and 50 characters.")
 
         return username
+    
+
+class UserResponseModel(BaseModel):
+    id: int
+    username: str
+
+    class Config:
+        orm_mode = True
+        getter_dict = PeeweeGetterDict
