@@ -8,6 +8,8 @@ from schemas import UserRequestModel
 from schemas import UserResponseModel
 from schemas import ReviewRequestModel
 from schemas import ReviewResponseModel
+from schemas import ReviewRequestPutModel
+from typing import List
 
 app = FastAPI(
     title="Movie Reviews",
@@ -71,3 +73,43 @@ async def create_review(user_review: ReviewRequestModel):
     return user_review
 
 
+
+@app.get('/reviews', response_model=List[ReviewResponseModel])
+async def get_reviews():
+    reviews = UserReview.select()
+
+
+    return [user_review for user_review in reviews]
+
+@app.get('/reviews/{review_id}', response_model=ReviewResponseModel)
+async def get_review (review_id: int):
+    user_review = UserReview.select().where(UserReview.id == review_id).first()
+
+    if user_review is None:
+        raise HTTPException(status_code=404, detail="Review not found")
+    
+    return user_review
+
+@app.put('/reviews/{review_id}', response_model=ReviewResponseModel)
+async def update_review(review_id: int, review_request: ReviewRequestPutModel):
+    user_review = UserReview.select().where(UserReview.id == review_id).first()
+
+    if user_review is None:
+        raise HTTPException(status_code=404, detail="Review not found")
+    
+    user_review.review = review_request.review
+    user_review.score = review_request.score
+    user_review.save()
+
+    return user_review
+
+@app.delete('/reviews/{review_id}', response_model=ReviewResponseModel)
+async def delete_review(review_id: int):
+    user_review = UserReview.select().where(UserReview.id == review_id).first()
+
+    if user_review is None:
+        raise HTTPException(status_code=404, detail="Review not found")
+    
+    user_review.delete_instance()
+
+    return user_review
