@@ -50,8 +50,7 @@ class ReviewValidator():
 
         return score
 
-class ReviewRequestModel(BaseModel, ReviewValidator):
-    user_id: int
+class ReviewRequestModel(BaseModel, ReviewValidator): 
     movie_id: int
     review: str
     score: int
