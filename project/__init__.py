@@ -11,6 +11,7 @@ from .database import Movie
 from .database import UserReview
 
 from .routers import user_router
+from .routers import movie_router
 from .routers import review_router
 
 from .common import create_access_token
@@ -23,6 +24,7 @@ app = FastAPI(
 api_v1 = APIRouter(prefix='/api/v1')
 
 api_v1.include_router(user_router)
+api_v1.include_router(movie_router)
 api_v1.include_router(review_router)
 
 

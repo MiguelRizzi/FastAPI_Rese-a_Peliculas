@@ -37,6 +37,9 @@ class UserResponseModel(ResponseModel):
 
 # _______________ Movie _______________
     
+class MovieRequestModel(BaseModel):
+    title: str
+    
 class MovieResponseModel(ResponseModel):
     id: int
     title: str
