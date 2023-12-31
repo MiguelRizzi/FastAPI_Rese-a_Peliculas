@@ -68,11 +68,12 @@ async def update_review(review_id: int, review_request: ReviewRequestPutModel, u
 async def delete_review(review_id: int, user: User = Depends(get_current_user)):
     user_review = UserReview.select().where(UserReview.id == review_id).first()
 
+    if user_review is None:
+        raise HTTPException(status_code=404, detail="Review not found")
+    
     if user_review.user_id != user.id:
         raise HTTPException(status_code=403, detail="You are not allowed to delete this review")
 
-    if user_review is None:
-        raise HTTPException(status_code=404, detail="Review not found")
     
     user_review.delete_instance()
 

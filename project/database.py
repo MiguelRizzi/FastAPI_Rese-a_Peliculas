@@ -37,6 +37,7 @@ class User(Model):
 class Movie (Model):
     title = CharField(max_length=50)
     created_at = DateTimeField(default=datetime.now)
+    user = ForeignKeyField(User, backref="reviews", on_delete="CASCADE")
 
     class Meta:
         database = database
@@ -46,8 +47,8 @@ class Movie (Model):
         return self.title
     
 class UserReview(Model):
-    user = ForeignKeyField(User, backref="reviews")
-    movie = ForeignKeyField(Movie)
+    user = ForeignKeyField(User, backref="reviews", on_delete="CASCADE")
+    movie = ForeignKeyField(Movie, on_delete="CASCADE")
     review = TextField()
     score = IntegerField()
     created_at = DateTimeField(default=datetime.now)
