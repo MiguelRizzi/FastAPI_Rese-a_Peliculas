@@ -9,8 +9,13 @@ from fastapi import HTTPException
 
 from .database import User
 
+from dotenv import load_dotenv
 
-SECRET_KEY= 'secretkey123'
+import os
+
+load_dotenv()
+
+SECRET_KEY= os.getenv('SECRET_KEY')
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/v1/auth")
 

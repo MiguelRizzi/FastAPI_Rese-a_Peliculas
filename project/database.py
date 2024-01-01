@@ -2,13 +2,20 @@ from peewee import *
 from datetime import datetime
 import hashlib
 
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
+
+
 database = MySQLDatabase(
-    'fastapi_project',
-    user='root',
-    password= '36110103Mi.',
-    host= 'localhost',
-    port= 3306
+    os.getenv('DATABASE_NAME'),
+    user=os.getenv('DATABASE_USER'),
+    password=os.getenv('DATABASE_PASSWORD'),
+    host=os.getenv('DATABASE_HOST'),
+    port= int(os.getenv('DATABASE_PORT'))
 )
+
 
 class User(Model):
     username = CharField(max_length=50, unique=True)
